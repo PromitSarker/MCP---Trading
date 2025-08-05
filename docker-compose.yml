@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  app:
+    build: ./
+    container_name: almamu
+    ports:
+      - "8008:8008"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
