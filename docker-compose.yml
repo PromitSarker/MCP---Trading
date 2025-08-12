@@ -5,7 +5,7 @@ services:
     build: ./
     container_name: almamu
     ports:
-      - "8008:8008"
+      - "2002:2002"
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped

@@ -7,11 +7,20 @@ from .models import BusinessIdeaInput, BusinessPlan, PDFExtraction, SuggestionRe
 from app.services import generate_business_plan, generate_suggestions
 from app.pdf_service import extract_text_from_pdf
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Business Plan Generator API",
     version="1.0.0",
     description="Generates a comprehensive JSON business plan"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],
 )
 
 @app.on_event("startup")

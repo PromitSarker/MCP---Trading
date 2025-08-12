@@ -8,6 +8,6 @@ _db_client: AsyncIOMotorClient | None = None
 async def init_db():
     global _db_client
     settings = get_settings()
-    _db_client = AsyncIOMotorClient(settings.mongo_uri)
+    _db_client = AsyncIOMotorClient(settings.mongo_uri, tls=True)
     await init_beanie(database=_db_client[settings.db_name],
                       document_models=[BusinessPlanDoc])
