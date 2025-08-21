@@ -1,7 +1,7 @@
 from typing import List, Dict, Optional, Any
 import json
 from app.config import get_settings,  get_groq_client
-from app.models import BusinessPlan, BusinessPlanDoc
+from app.models import BusinessPlan
 
 SYSTEM_PROMPT = """
 You are a senior financial analyst generating a full investor-grade business plan in valid JSON format.
@@ -168,12 +168,8 @@ async def generate_business_plan(
             else:
                 raise ValueError(f"Invalid JSON response with no braces found. Raw content: {raw_content[:200]}")
             
-        plan_doc = BusinessPlanDoc(user_id=user_id,
-        plan=BusinessPlan(**plan_data))
-        await plan_doc.insert()
-        
-        return {"id": str(plan_doc.id), **plan_data}
-
+        return plan_data
+    
     except ValueError as e:
         raise ValueError(f"API Error: {str(e)}")
     except Exception as e:

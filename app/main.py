@@ -1,8 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request, File, UploadFile, Query
 from fastapi.responses import JSONResponse
 import json
-from app.models import BusinessPlanDoc
-from app.database import init_db
 from .models import BusinessIdeaInput, BusinessPlan, PDFExtraction, SuggestionRequest, SuggestionResponse, DocumentExtraction, FinancialExtraction
 from app.services import generate_business_plan, generate_suggestions
 from app.pdf_service import extract_text_from_pdf
@@ -23,9 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def on_startup():
-    await init_db()
 
 @app.post("/generate", response_model=dict)
 async def create_business_plan(payload: BusinessIdeaInput):
@@ -94,11 +89,6 @@ async def get_suggestions(request: SuggestionRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate suggestions: {str(e)}")
-
-@app.get("/plans/user/{user_id}")
-async def list_user_plans(user_id: str) -> List[BusinessPlan]:
-    docs = await BusinessPlanDoc.find(BusinessPlanDoc.user_id == user_id).to_list()
-    return [d.plan for d in docs]
 
 @app.get("/health")
 def health():

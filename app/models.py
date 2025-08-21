@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-from beanie import Document          #  <-- add this
+from typing import List, Optional, Dict, Any    
 from pydantic import BaseModel, Field
 from typing import List
 
@@ -122,10 +121,3 @@ class FinancialExtraction(BaseModel):
 class DocumentExtraction(PDFExtraction):
     financial_data: Optional[FinancialExtraction] = None
     document_type: str
-
-class BusinessPlanDoc(Document):
-    user_id: str
-    plan: BusinessPlan
-
-    class Settings:
-        name = "business_plans"

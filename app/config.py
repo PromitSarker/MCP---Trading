@@ -10,8 +10,6 @@ class Settings(BaseSettings):
     model_name: str
     groq_api_url: str
     request_timeout: int = Field(default=120)
-    mongo_uri: str = Field(default="mongodb://localhost:27017")
-    db_name: str = Field(default="business_planner")
 
     class Config:
         env_file = ".env"

@@ -10,5 +10,3 @@ pdf2image
 PyPDF2 
 python-multipart
 tenacity
-beanie
-motor
