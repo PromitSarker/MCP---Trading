@@ -122,7 +122,7 @@ Only generate the following parts of the schema:
 logger = logging.getLogger(__name__)
 
 
-async def enhance_short_sections(client, plan: dict, context: str, model: str) -> dict:
+async def enhance_short_sections(client, plan: dict, context: str, model: str, language: str = "English") -> dict:
     """Enhance sections that are too short by making additional API calls"""
     enhanced_plan = plan.copy()
     
@@ -158,7 +158,7 @@ Please provide an enhanced version that is more detailed and comprehensive:
                 try:
                     response = await client.chat.completions.create(
                         messages=[
-                            {"role": "system", "content": f"You are enhancing a business plan section to meet word count requirements."},
+                            {"role": "system", "content": f"You are enhancing a business plan section to meet word count requirements. Use {language}."},
                             {"role": "user", "content": enhancement_prompt}
                         ],
                         model=model,
@@ -178,7 +178,8 @@ Please provide an enhanced version that is more detailed and comprehensive:
 
 # --------------- HELPER FUNCTIONS ---------------
 
-def build_partial_prompt(section_keys: List[str]) -> str:
+def build_partial_prompt(section_keys: List[str], language: str = "English") -> str:
+ 
     """Build a detailed prompt with explicit word count requirements"""
     if not section_keys:
         raise ValueError("section_keys cannot be empty")
@@ -237,6 +238,7 @@ FINANCIAL CONSISTENCY REQUIREMENTS:
     example_str = json.dumps(example_json, indent=2)
 
     prompt = f"{SYSTEM_PROMPT_HEADER}{', '.join(section_keys)}\n\n" \
+    f"LANGUAGE REQUIREMENT:\n- All output must be written in **{language}**.\n\n" \
              "CRITICAL WORD COUNT REQUIREMENTS:\n" + \
              "\n".join(section_instructions) + "\n\n" \
              "IMPORTANT: You MUST generate content that meets or exceeds the word count requirements. " \
@@ -438,8 +440,8 @@ def validate_section_result(result: dict, section_keys: List[str]) -> bool:
 
 # --------------- API CALL FUNCTIONS ---------------
 
-async def call_partial_openai(client, section_keys, context, model):
-    partial_prompt = build_partial_prompt(section_keys)
+async def call_partial_openai(client, section_keys, context, model, language="English"):
+    partial_prompt = build_partial_prompt(section_keys, language)
     messages = [
         {"role": "system", "content": partial_prompt},
         {"role": "user", "content": context}
@@ -521,10 +523,11 @@ def extract_values_from_text(text: str, section_keys: List[str]) -> dict:
     
     return result
 
-async def call_partial_openai_with_retry(client, section_keys, context, model, max_retries=3):
+async def call_partial_openai_with_retry(client, section_keys, context, model, language="English", max_retries=3):
     for attempt in range(max_retries):
         try:
-            result = await call_partial_openai(client, section_keys, context, model)
+            # Call the actual OpenAI function with the language parameter
+            result = await call_partial_openai(client, section_keys, context, model, language)
             return result
         except Exception as e:
             if attempt == max_retries - 1:
@@ -539,7 +542,8 @@ async def call_partial_openai_with_retry(client, section_keys, context, model, m
 async def generate_business_plan(
     uploaded_file: Optional[str] = None,
     user_input: List[Any] = None,
-    user_id: str = None
+    user_id: str = None,
+    language: str = "English"  # Add language parameter
 ) -> dict:
     settings = get_settings()
     client = get_openai_client()
@@ -574,7 +578,8 @@ async def generate_business_plan(
                                               "funding_sources", "operations_plan"]):
                     max_tokens = 10000  # Increased tokens for text sections
                 
-                result = await call_partial_openai_with_retry(client, group, context, settings.model_name, max_tokens)
+                # Pass the language parameter to the retry function
+                result = await call_partial_openai_with_retry(client, group, context, settings.model_name, language, max_retries=3)
                 if isinstance(result, dict):
                     merged_plan.update(result)
                 await asyncio.sleep(1)  # Rate limiting
@@ -584,8 +589,9 @@ async def generate_business_plan(
                 empty_result = create_empty_section(group)
                 merged_plan.update(empty_result)
         
-        # Enhance short sections
-        enhanced_plan = await enhance_short_sections(client, merged_plan, context, settings.model_name)
+        # Enhance short sections and pass the language
+        enhanced_plan = await enhance_short_sections(client, merged_plan, context, settings.model_name, language)
+
         
         return enhanced_plan
         
@@ -623,7 +629,7 @@ async def generate_suggestions(question: str) -> List[str]:
             messages=messages,
             model=settings.model_name,
             temperature=0.3,
-            max_tokens=200
+            max_tokens=100
         )
         
         content = response.choices[0].message.content.strip()
