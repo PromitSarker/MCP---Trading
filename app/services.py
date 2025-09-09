@@ -6,7 +6,7 @@ import logging
 from app.config import get_settings, get_openai_client
 
 # --------------- SECTION GROUPING ---------------
-MAX_TOKENS_PARTIAL = 28000
+MAX_TOKENS_PARTIAL = 29000
 
 # More logical grouping - separate text sections from financial sections
 SECTION_GROUPS = [
@@ -106,13 +106,14 @@ SCHEMA_DEFINITION = {
 # --------------- SYSTEM PROMPT TEMPLATES ---------------
 
 SYSTEM_PROMPT_HEADER = """
-You are a senior financial analyst generating a detailed, investor-grade business plan in valid JSON.
+You are a senior financial analyst generating a detailed, investor-grade business plan in valid JSON. Provide everything in JSON MUST.
 
 STRICT RULES:
-- Output only valid JSON, no markdown, no comments, no text outside JSON.
+- Output ONLY valid JSON, no markdown, no comments, no text outside JSON.
 - STRICTLY FOLLOW THE STRUCTURE AND DATA TYPES in the schema.
 - Language: match user input language.
 - Financials: 3 years (year 1 to 3), fully consistent (e.g., net_cash = sum of flows, assets = liabilities + equity).
+- Currency: All amounts must be in {currency}.
 - Standards: All financial statements MUST follow Italian D.Lgs. 127/91 (CEE layout).
 
 Only generate the following parts of the schema:
@@ -178,7 +179,8 @@ Please provide an enhanced version that is more detailed and comprehensive:
 
 # --------------- HELPER FUNCTIONS ---------------
 
-def build_partial_prompt(section_keys: List[str], language: str = "English") -> str:
+def build_partial_prompt(section_keys: List[str], language: str = "English", currency: str = "EUR") -> str:
+
  
     """Build a detailed prompt with explicit word count requirements"""
     if not section_keys:
@@ -221,7 +223,7 @@ FINANCIAL CONSISTENCY REQUIREMENTS:
 - Assets must equal liabilities + equity in balance sheet
 - Cash flow components must sum to net_cash
 - Ratios must be calculated correctly from the financial data
-- All amounts in Euros
+- All amounts in {currency}
 """
 
     # Create example JSON for the requested sections
@@ -237,7 +239,7 @@ FINANCIAL CONSISTENCY REQUIREMENTS:
     
     example_str = json.dumps(example_json, indent=2)
 
-    prompt = f"{SYSTEM_PROMPT_HEADER}{', '.join(section_keys)}\n\n" \
+    prompt = f"{SYSTEM_PROMPT_HEADER.format(currency=currency)}{', '.join(section_keys)}\n\n" \
     f"LANGUAGE REQUIREMENT:\n- All output must be written in **{language}**.\n\n" \
              "CRITICAL WORD COUNT REQUIREMENTS:\n" + \
              "\n".join(section_instructions) + "\n\n" \
@@ -440,8 +442,8 @@ def validate_section_result(result: dict, section_keys: List[str]) -> bool:
 
 # --------------- API CALL FUNCTIONS ---------------
 
-async def call_partial_openai(client, section_keys, context, model, language="English"):
-    partial_prompt = build_partial_prompt(section_keys, language)
+async def call_partial_openai(client, section_keys, context, model, language="English", currency="EUR"):
+    partial_prompt = build_partial_prompt(section_keys, language, currency)
     messages = [
         {"role": "system", "content": partial_prompt},
         {"role": "user", "content": context}
@@ -523,11 +525,11 @@ def extract_values_from_text(text: str, section_keys: List[str]) -> dict:
     
     return result
 
-async def call_partial_openai_with_retry(client, section_keys, context, model, language="English", max_retries=3):
+async def call_partial_openai_with_retry(client, section_keys, context, model, language="English", currency="EUR", max_retries=3):
     for attempt in range(max_retries):
         try:
             # Call the actual OpenAI function with the language parameter
-            result = await call_partial_openai(client, section_keys, context, model, language)
+            result = await call_partial_openai(client, section_keys, context, model, language, currency)
             return result
         except Exception as e:
             if attempt == max_retries - 1:
@@ -543,7 +545,8 @@ async def generate_business_plan(
     uploaded_file: Optional[str] = None,
     user_input: List[Any] = None,
     user_id: str = None,
-    language: str = "English"  # Add language parameter
+    language: str = "English",
+    currency: str = "EUR"  # New parameter
 ) -> dict:
     settings = get_settings()
     client = get_openai_client()
@@ -579,7 +582,9 @@ async def generate_business_plan(
                     max_tokens = 10000  # Increased tokens for text sections
                 
                 # Pass the language parameter to the retry function
-                result = await call_partial_openai_with_retry(client, group, context, settings.model_name, language, max_retries=3)
+                result = await call_partial_openai_with_retry(
+    client, group, context, settings.model_name, language=language, currency=currency, max_retries=3
+)
                 if isinstance(result, dict):
                     merged_plan.update(result)
                 await asyncio.sleep(1)  # Rate limiting

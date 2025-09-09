@@ -13,6 +13,7 @@ class BusinessIdeaInput(BaseModel):
         description="List of strings / objects describing the business idea or requirements"
     )
     language: str = "English" 
+    currency: str = "Euro"
     user_id: str 
 
 class Section(BaseModel):
