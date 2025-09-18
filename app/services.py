@@ -13,41 +13,41 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     "executive_summary": {
         "type": "string",
         "description": "Summarize the overall business opportunity in 300+ words: include the core product or service, the market need it addresses, key team strengths, business traction (if any), and the long-term vision. Highlight why this business matters now. ",
-        "min_words": 500
+        "min_words": 300
     },
     "business_overview": {
         "type": "string", 
-        "description": "Describe the company's mission, vision, and founding story in 1050+ words. Include when and why it was started, what goals it seeks to achieve, where it is currently based, and what motivates the team behind it.",
-        "min_words": 1050
+        "description": "Describe the company's mission, vision, and founding story. Include when and why it was started, what goals it seeks to achieve, where it is currently based, and what motivates the team behind it.",
+        "min_words": 500
     },
     "market_analysis": {
         "type": "string",
-        "description": "Provide a 1000+ word analysis of the market: total addressable market (TAM), serviceable available market (SAM), and obtainable market (SOM). Identify competitors, customer segments, market trends, and why the timing is right for this solution.",
-        "min_words": 1000
+        "description": "Provide a analysis of the market: total addressable market (TAM), serviceable available market (SAM), and obtainable market (SOM). Identify competitors, customer segments, market trends, and why the timing is right for this solution.",
+        "min_words": 700
     },
     "business_model": {
         "type": "string",
-        "description": "Explain how the business makes money in 1200+ words. Describe primary and secondary revenue streams, customer acquisition strategy, pricing model, cost structure, margins, and how the model scales over time.",
-        "min_words": 1200
+        "description": "Explain how the business makes money. Describe primary and secondary revenue streams, customer acquisition strategy, pricing model, cost structure, margins, and how the model scales over time.",
+        "min_words": 500
     },
     "marketing_and_sales_strategy": {
         "type": "string",
-        "description": "Describe in 1500+ words how the business plans to go to market. Include positioning, target customers, sales channels (online/offline), customer acquisition cost (CAC) strategies, conversion funnels, and how growth will be driven operationally.",
-        "min_words": 1500
+        "description": "Describe how the business plans to go to market. Include positioning, target customers, sales channels (online/offline), customer acquisition cost (CAC) strategies, conversion funnels, and how growth will be driven operationally.",
+        "min_words": 500
     },
     "financial_highlights": {
         "type": "json",
-        "description": "3 years of key financial metrics. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of key financial metrics. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "revenue": "float", "net_income": "float", "capex": "float", "debt_repayment": "float"}],
         "example": [
-            {"year": 1, "revenue": 250000, "net_income": 30000, "capex": 50000, "debt_repayment": 10000},
-            {"year": 2, "revenue": 400000, "net_income": 60000, "capex": 70000, "debt_repayment": 15000},
-            {"year": 3, "revenue": 650000, "net_income": 100000, "capex": 90000, "debt_repayment": 20000}
+            {"year": 1, "revenue": 250000, "net_income": 30, "capex": 50000, "debt_repayment": 10000},
+            {"year": 2, "revenue": 400000, "net_income": 60, "capex": 70000, "debt_repayment": 15000},
+            {"year": 3, "revenue": 650000, "net_income": 100, "capex": 90000, "debt_repayment": 20000}
         ]
     },
     "cash_flow_analysis": {
         "type": "json",
-        "description": "3 years of cash flow statement following standard format. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of cash flow statement following standard format. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "operating": "float", "investing": "float", "financing": "float", "net_cash": "float"}],
         "example": [
             {"year": 1, "operating": 80000, "investing": -50000, "financing": 10000, "net_cash": 40000},
@@ -57,7 +57,7 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     },
     "profit_and_loss_projection": {
         "type": "json",
-        "description": "3 years of profit & loss statement with detailed breakdown. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of profit & loss statement with detailed breakdown. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "revenue": "float", "cogs": "float", "gross_profit": "float", "operating_expenses": "float", "ebitda": "float", "depreciation_amortization": "float", "ebit": "float", "interest": "float", "taxes": "float", "net_income": "float"}],
         "example": [
             {"year": 1, "revenue": 250000, "cogs": 100000, "gross_profit": 150000, "operating_expenses": 120000, "ebitda": 30000, "depreciation_amortization": 5000, "ebit": 25000, "interest": 2000, "taxes": 3000, "net_income": 30000},
@@ -67,7 +67,7 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     },
     "balance_sheet": {
         "type": "json",
-        "description": "3 years of balance sheet with detailed breakdown. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of balance sheet with detailed breakdown. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "assets": "float", "current_assets": "float", "non_current_assets": "float", "liabilities": "float", "current_liabilities": "float", "non_current_liabilities": "float", "equity": "float"}],
         "example": [
             {"year": 1, "assets": 300000, "current_assets": 150000, "non_current_assets": 150000, "liabilities": 200000, "current_liabilities": 100000, "non_current_liabilities": 100000, "equity": 100000},
@@ -77,7 +77,7 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     },
     "net_financial_position": {
         "type": "json",
-        "description": "3 years of net financial position. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of net financial position. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "net_position": "float"}],
         "example": [
             {"year": 1, "net_position": -50000},
@@ -87,7 +87,7 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     },
     "debt_structure": {
         "type": "json",
-        "description": "3 years of debt structure and repayment schedule. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of debt structure and repayment schedule. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "repayment": "float", "interest_rate": "float", "outstanding_debt": "float"}],
         "example": [
             {"year": 1, "repayment": 10000, "interest_rate": 4.5, "outstanding_debt": 100000},
@@ -97,7 +97,7 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     },
     "key_ratios": {
         "type": "json",
-        "description": "3 years of key financial ratios. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+        "description": "5 years of key financial ratios. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
         "schema": [{"year": "int", "roi": "float", "roe": "float", "debt_to_equity": "float", "gross_margin": "float", "ebitda_margin": "float", "net_margin": "float", "current_ratio": "float", "quick_ratio": "float", "asset_turnover": "float"}],
         "example": [
             {"year": 1, "roi": 12.5, "roe": 15.2, "debt_to_equity": 2.0, "gross_margin": 60.0, "ebitda_margin": 12.0, "net_margin": 12.0, "current_ratio": 1.5, "quick_ratio": 1.2, "asset_turnover": 0.83},
@@ -107,7 +107,7 @@ INDIVIDUAL_SECTION_SCHEMAS = {
     },
     "operating_cost_breakdown": {
     "type": "json",
-    "description": "3 years of comprehensive operating cost breakdown following Italian GAAP (OIC standards) and D.Lgs. 127/91 requirements, with extensive numerical analysis specific to Italian business environment. Include quarterly breakdown reflecting Italian seasonal business patterns, cost growth rates accounting for Italian inflation trends, variance analysis using Italian industry benchmarks, and operational KPIs relevant to Italian market conditions. Provide detailed subcategory metrics with percentage changes based on Italian labor costs (including 13th/14th month salaries, TFR contributions, INPS/INAIL contributions), Italian tax structure (IRES, IRAP), regional business costs variations across Northern/Central/Southern Italy, and compliance with Italian employment regulations. Factor in Italian-specific costs like commercialista fees, camera di commercio fees, regional tax variations, and sector-specific Italian regulations. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
+    "description": "5 years of comprehensive operating cost breakdown following Italian GAAP (OIC standards) and D.Lgs. 127/91 requirements, with extensive numerical analysis specific to Italian business environment. Include quarterly breakdown reflecting Italian seasonal business patterns, cost growth rates accounting for Italian inflation trends, variance analysis using Italian industry benchmarks, and operational KPIs relevant to Italian market conditions. Provide detailed subcategory metrics with percentage changes based on Italian labor costs (including 13th/14th month salaries, TFR contributions, INPS/INAIL contributions), Italian tax structure (IRES, IRAP), regional business costs variations across Northern/Central/Southern Italy, and compliance with Italian employment regulations. Factor in Italian-specific costs like commercialista fees, camera di commercio fees, regional tax variations, and sector-specific Italian regulations. DO NOT JUST PUT THE NUMBERS AS IN THE EXAMPLE. PROVIDE REALISTIC NUMERICAL DATAS.",
 
     "schema": [
         {
@@ -266,21 +266,164 @@ INDIVIDUAL_SECTION_SCHEMAS = {
 },
     "sector_strategy": {
         "type": "string",
-        "description": "Provide a detailed strategy (minimum 1250+ words) outlining how the company will operate within its specific industry sector. This should include analysis of current sector trends, competitive landscape, regulatory environment, key success factors, and how the business will position itself to gain a competitive advantage over time.",
-        "min_words": 1250
+        "description": "Provide a detailed strategy outlining how the company will operate within its specific industry sector. This should include analysis of current sector trends, competitive landscape, regulatory environment, key success factors, and how the business will position itself to gain a competitive advantage over time.",
+        "min_words": 300
     },
     "funding_sources": {
         "type": "string",
-        "description": "Explain in detail (minimum 1200+ words) all current and future funding sources, including but not limited to equity investment, loans, grants, crowdfunding, or internal cash flow. Specify amounts, stages of funding, potential investors or lenders, and how the funds will be allocated within the business.",
-        "min_words": 1200
+        "description": "Explain in detail  all current and future funding sources, including but not limited to equity investment, loans, grants, crowdfunding, or internal cash flow. Specify amounts, stages of funding, potential investors or lenders, and how the funds will be allocated within the business.",
+        "min_words": 300
     },
     "operations_plan": {
         "type": "string",
-        "description": "Describe in depth (minimum 1500+ words) the company's operation plan, and any strategic moves. Include what the business will do to execute its strategy, including any strategic partnerships, collaborations, or acquisitions. Explain how the business will manage risks and opportunities, and how it will adapt to changing market conditions.",
-        "min_words": 1500
+        "description": "Describe in depth the company's operation plan, and any strategic moves. Include what the business will do to execute its strategy, including any strategic partnerships, collaborations, or acquisitions. Explain how the business will manage risks and opportunities, and how it will adapt to changing market conditions.",
+        "min_words": 300
+    },
+    # NEW SECTIONS BASED ON WAYNE SRL EXAMPLE
+    "financial_analysis": {
+        "type": "json",
+        "description": "Comprehensive Italian financial analysis following Wayne SRL example structure. Include detailed breakdown of financial position, cash flow analysis, and key Italian financial metrics. Follow Italian GAAP standards and D.Lgs. 127/91 requirements.",
+        "schema": [
+  {
+    "year": 2023,
+                "gross_operating_cash_flow": 94739,
+                "working_capital_change": 18872,
+                "current_management_cash_flow": 113611,
+                "operating_cash_flow": -286389,
+                "debt_service_cash_flow": -287988,
+                "shareholders_cash_flow": 112012,
+                "net_cash_flow": 112012,
+                "sales_revenue": 1405366,
+                "production_value": 1405366,
+                "gross_operating_margin": 130774,
+                "ebit": 129157,
+                "ebt": 127053,
+                "net_income": 91523,
+                "dividends": 0,
+                "net_tangible_assets": 405516,
+                "net_intangible_assets": 475,
+                "financial_assets": 0,
+                "trade_assets": 0,
+                "inventory": 0,
+                "deferred_liquidity": 102204,
+                "immediate_liquidity": 112826,
+                "equity": 167638,
+                "long_term_debt": 430767,
+                "short_term_debt": 22616,
+                "net_financial_position": 323674,
+                "mortgage_loans": 400000,
+                "other_financial_debts": 36500,
+                "cash_and_banks": -112826
+  }
+],
+        "example": [
+            {
+  "year": 2023,
+  "gross_operating_cash_flow": 94739,
+  "working_capital_change": 18872,
+  "current_management_cash_flow": 113611,
+  "operating_cash_flow": -286389,
+  "debt_service_cash_flow": -287988,
+  "shareholders_cash_flow": 112012,
+  "net_cash_flow": 112012,
+  "sales_revenue": 1405366,
+  "production_value": 1405366,
+  "gross_operating_margin": 130774,
+  "ebit": 129157,
+  "ebt": 127053,
+  "net_income": 91523,
+  "dividends": 0,
+  "net_tangible_assets": 405516,
+  "net_intangible_assets": 475,
+  "financial_assets": 0,
+  "trade_assets": 0,
+  "inventory": 0,
+  "deferred_liquidity": 102204,
+  "immediate_liquidity": 112826,
+  "equity": 167638,
+  "long_term_debt": 430767,
+  "short_term_debt": 22616,
+  "net_financial_position": 323674,
+  "mortgage_loans": 400000,
+  "other_financial_debts": 36500,
+  "cash_and_banks": -112826
+            }
+        ]
+    },
+    "ratios_analysis": {
+        "type": "json",
+        "description": "Detailed Italian financial ratios analysis following Wayne SRL example. Include ROI, ROE, ROS, debt ratios, and other key Italian financial indicators.",
+        "schema": [
+            {
+               "year": "int",
+                "roi": "float",                       #Return on Investment
+                "roe": "float",                       #Return on Equity
+                "ros": "float",                       #Return on Sales
+                "ebit_margin": "float",               #EBIT from Operations
+                "net_debt_to_ebitda": "float",        #PFN/MOL
+                "net_debt_to_equity": "float",        #PFN/PN
+                "net_debt_to_revenue": "float",      #PFN/Ricavi
+                "current_ratio": "float",             # Current Assets / Current Liabilities
+                "quick_ratio": "float",               # (CA - Inventory) / CL
+                "debt_to_equity": "float",            #Total Debt / Equity
+                "treasury_margin": "float",           # Margine di Tesoreria
+                "structural_margin": "float",        # Margine di Struttura
+                "net_working_capital": "float",       #Capitale Circolante Netto
+                "altman_z_score": "float" 
+            }
+        ],
+        "example": [
+            {
+                "year": 2023,
+                "roi": 20.8,
+                "roe": 54.6,
+                "ros": 9.19,
+                "ebit_margin": 6138.3,
+                "net_debt_to_ebitda": 247.5,
+                "net_debt_to_equity": 193.1,
+                "net_debt_to_revenue": 23.0,
+                "current_ratio": 9.5,
+                "quick_ratio": 950.8,
+                "debt_to_equity": 1.93,
+                "treasury_margin": 192414,
+                "structural_margin": -238353,
+                "net_working_capital": 192414,
+                "altman_z_score": 3.7
+            }
+        ]
+    },
+    "management_team": {
+        "type": "string",
+        "description": "Detailed description of the management team following Italian business standards. Include roles, experience, and responsibilities of each key team member.",
+        "min_words": 800
+    },
+    "production_sales_forecast": {
+        "type": "json",
+        "description": "Production and sales forecast following Italian market patterns. Include detailed projections for revenue growth, market expansion, and production capacity.",
+        "schema": [
+            {
+  "year": "int",
+  "sales_revenue": "float",        
+  "revenue_growth": "float",        
+  "units_sold": "int",               
+  "average_price": "float",          
+  "unit_production_cost": "float",   
+  "unit_margin": "float"  
+            }
+        ],
+        "example": [
+            {
+            "year": 2023,
+            "sales_revenue": 1405366,
+            "revenue_growth": 15.0,
+            "units_sold": 10000,
+            "average_price": 140.54,
+            "unit_production_cost": 127.49,
+            "unit_margin": 13.05
+            }
+        ]
     }
 }
-
 # --------------- INDIVIDUAL SECTION PROMPTS ---------------
 
 def build_individual_section_prompt(section_key: str, language: str = "English", currency: str = "EUR") -> str:
@@ -336,7 +479,7 @@ REQUIRED STRUCTURE:
 
 CRITICAL INSTRUCTIONS:
 1. Output ONLY valid JSON in the exact format shown above
-2. Generate 3 years of data (year 1, 2, 3)
+2. Generate 5 years of data (year 1, 2, 3, 4, 5)
 3. All financial data must be consistent and realistic
 4. Numbers must follow logical progression
 5. No markdown, no comments, no text outside JSON
@@ -366,7 +509,7 @@ async def call_individual_section(client, section_key: str, context: str, model:
                 messages=messages,
                 model=model,
                 temperature=0.1,
-                max_tokens=8000 if INDIVIDUAL_SECTION_SCHEMAS[section_key]["type"] == "string" else 4000,
+                max_tokens=8000 if INDIVIDUAL_SECTION_SCHEMAS[section_key]["type"] == "string" else 8000,
             )
 
             content = response.choices[0].message.content.strip()

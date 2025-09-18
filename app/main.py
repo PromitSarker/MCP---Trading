@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 
-from .models import (
+from app.models import (
     BusinessIdeaInput,
     BusinessPlan,
     PDFExtraction,
@@ -21,6 +21,15 @@ app = FastAPI(
     version="1.0.0",
     description="Generates a comprehensive JSON business plan"
 )
+
+
+import re
+
+def clean_text(text: str) -> str:
+    """Remove control characters that break JSON parsing."""
+    if not text:
+        return text
+    return re.sub(r"[\x00-\x1f]", " ", text)
 
 # ---------------- CORS ----------------
 
@@ -45,6 +54,12 @@ async def create_business_plan(payload: BusinessIdeaInput):
             user_input=payload.user_input,
             user_id=payload.user_id
         )
+
+        # Clean all string fields in the returned plan
+        for key, value in plan_dict.items():
+            if isinstance(value, str):
+                plan_dict[key] = clean_text(value)
+
         return plan_dict
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate business plan: {str(e)}")
@@ -64,6 +79,8 @@ async def extract_pdf(
     try:
         contents = await file.read()
         text_content, page_count, metadata, financial_data = extract_text_from_pdf(contents, document_type)
+
+        text_content = clean_text(text_content)
 
         return DocumentExtraction(
             text_content=text_content,
