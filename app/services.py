@@ -513,6 +513,7 @@ async def call_individual_section(client, section_key: str, context: str, model:
             )
 
             content = response.choices[0].message.content.strip()
+            content = re.sub(r'[\x00-\x1f\x7f-\x9f]', ' ', content)
             logger.info(f"Raw API response for {section_key}: {content[:200]}...")
             
             # Parse JSON
