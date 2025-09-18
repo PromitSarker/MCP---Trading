@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Request, File, UploadFile, Query
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
+from app.pdf_service import extract_from_multiple_pdfs
 
 from app.models import (
     BusinessIdeaInput,
@@ -67,31 +68,27 @@ async def create_business_plan(payload: BusinessIdeaInput):
 
 @app.post("/extract-pdf", response_model=DocumentExtraction)
 async def extract_pdf(
-    file: UploadFile = File(...),
+    files: List[UploadFile] = File(...),
     document_type: str = Query(..., description="Type of document: 'balance_sheet' or 'company_extract'")
 ):
-    """
-    Extract text and financial data from PDF files
-    """
-    if not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="File must be a PDF")
+    """Extract and merge text and financial data from multiple PDF files"""
+    files_content = []
+    for file in files:
+        if not file.filename.lower().endswith(".pdf"):
+            raise HTTPException(status_code=400, detail=f"File {file.filename} must be a PDF")
+        content = await file.read()
+        files_content.append(content)
 
-    try:
-        contents = await file.read()
-        text_content, page_count, metadata, financial_data = extract_text_from_pdf(contents, document_type)
+    merged_results = extract_from_multiple_pdfs(files_content, document_type, merge=True)
+    text, pages, metadata, financial_data = merged_results[0]
 
-        text_content = clean_text(text_content)
-
-        return DocumentExtraction(
-            text_content=text_content,
-            page_count=page_count,
-            metadata=metadata,
-            financial_data=FinancialExtraction(**financial_data) if financial_data else None,
-            document_type=document_type
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"PDF processing failed: {str(e)}")
-
+    return DocumentExtraction(
+        text_content=text,
+        page_count=pages,
+        metadata=metadata,
+        financial_data=FinancialExtraction(**financial_data) if financial_data else None,
+        document_type=document_type
+    )
 
 @app.post("/suggestions", response_model=SuggestionResponse)
 async def get_suggestions(request: SuggestionRequest):

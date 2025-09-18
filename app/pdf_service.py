@@ -45,3 +45,27 @@ def extract_text_from_pdf(file_content: bytes, document_type: str) -> Tuple[str,
     financial_data = financial_extractor.extract_financial_data(full_text_str)
     
     return full_text_str, num_pages, metadata, financial_data
+
+def extract_from_multiple_pdfs(files_content: List[bytes], document_type: str,
+                               merge: bool = False) -> List[Tuple[str, int, Dict, Optional[Dict]]]:
+    """
+    Handle multiple PDFs. Returns list of results per file unless merge=True.
+    """
+    results = []
+    for file_content in files_content:
+        result = extract_text_from_pdf(file_content, document_type)
+        results.append(result)
+
+    if merge:
+        # Merge all results into one
+        merged_text = "\n\n".join(r[0] for r in results)
+        merged_pages = sum(r[1] for r in results)
+        merged_metadata = {f"doc_{i}": r[2] for i, r in enumerate(results)}
+        merged_financial_data = {}
+        for _, _, _, fin in results:
+            if fin:
+                merged_financial_data.update(fin)
+
+        return [(merged_text, merged_pages, merged_metadata, merged_financial_data)]
+
+    return results
